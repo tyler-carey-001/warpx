@@ -1171,9 +1171,9 @@ Additional PML parameters
 
     The depth of the PML, in number of cells.
 
-.. pp:param:: do_similar_dm_pml
-    :type: ``int``
-    :default: 1
+.. pp:param:: warpx.do_similar_dm_pml
+    :type: ``bool``
+    :default: ``true``
 
     Whether or not to use an amrex::DistributionMapping for the PML grids that is *similar* to the mother grids, meaning that the
     mapping will be computed to minimize the communication costs between the PML and the mother grids.
@@ -2194,9 +2194,9 @@ Particle initialization
     :default: ``0``
     :optional:
 
-    Splitting technique. When ``0``, particles are split along the simulation
-    axes (4 particles in 2D, 6 particles in 3D). When ``1``, particles are split
-    along the diagonals (4 particles in 2D, 8 particles in 3D).
+    Splitting technique. When ``0``, particles are split along the diagonals
+    (4 particles in 2D, 8 particles in 3D). When ``1``, particles are split
+    along the simulation axes (4 particles in 2D, 6 particles in 3D).
 
 .. pp:param:: <species_name>.do_not_deposit
     :type: ``0`` or ``1``
@@ -3670,8 +3670,8 @@ Details about the collision models can be found in the :ref:`theory section <mul
     formulation is intrinsically energy-conserving when combined with MCC collisions, as shown in `Angus et al., J. Comput. Phys. 456, 2022 <https://doi.org/10.1016/j.jcp.2022.111030>`__.
 
 .. pp:param:: collisions.shuffling_method
-    :type: ``bool``
-    :default: 0
+    :type: ``string``
+    :default: ``FisherYates``
     :optional:
 
     Specify the shuffling method used for pairwise collisions (which includes ``pairwisecoulomb``, ``nuclearfusion``, ``bremsstrahlung``, ``linear_breit_wheeler``, ``dsmc``, and ``linear_compton``).
@@ -4428,7 +4428,7 @@ Maxwell solver: kinetic-fluid hybrid
 
     If :pp:param:`external_vector_potential.<field_name>.read_from_file` is set to ``false``, Sets the external vector potential to be populated by an implicit function (on the grid) in :math:`weber/m`.
 
-.. pp:param:: external_vector_potential.<field_name>.A_time_external_grid_function(t)
+.. pp:param:: external_vector_potential.<field_name>.A_time_external_function(t)
     :type: ``str``
     :default: ``"1"``
     :optional:
@@ -6198,11 +6198,11 @@ Schwinger process
 
 .. pp:param:: warpx.quantum_xi
     :type: ``float``
-    :default: 1.3050122.e-52
+    :default: 1.3050122e-52
 
     Overwrites the actual quantum parameter used in Maxwell's QED equations. Assigning a
     value here will make the simulation unphysical, but will allow QED effects to become more apparent.
-    Note that this option will only have an effect if the ``warpx.use_Hybrid_QED`` flag is also triggered.
+    Note that this option will only have an effect if the ``warpx.use_hybrid_QED`` flag is also triggered.
     This feature does not require to compile with ``-DWarpX_QED=ON``.
 
 

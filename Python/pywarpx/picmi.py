@@ -2311,7 +2311,7 @@ class HybridPICSolver(
     )
     A_external: dict[str, dict[str, float | str | bool]] | None = Field(
         default=None,
-        description="Function of space and time specifying external (non-plasma) vector potential fields. It is expected that a nested dictionary will be passed in for each separate vector potential that may have different spatial configuration or time dependence. Each field entry should contain either implicit functions with (x,y,z) dependence for 'Ax_external_function', 'Ay_external_function', 'Az_external_function', plus 'A_time_external_function' with (t) dependence, or alternatively 'load_from_file': True with a 'path' to an OpenPMD file along with 'A_time_external_function'.",
+        description="Function of space and time specifying external (non-plasma) vector potential fields. It is expected that a nested dictionary will be passed in for each separate vector potential that may have different spatial configuration or time dependence. Each field entry should contain either implicit functions with (x,y,z) dependence for 'Ax_external_function', 'Ay_external_function', 'Az_external_function', plus 'A_time_external_function' with (t) dependence, or alternatively 'read_from_file': True with a 'path' to an OpenPMD file along with 'A_time_external_function'.",
     )
     do_external_diva_cleaning: bool | None = Field(
         default=None,
