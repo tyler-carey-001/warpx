@@ -120,11 +120,11 @@ void SingleNuclearFusionEvent (const amrex::ParticleReal& u1x, const amrex::Part
     // std::expm1 is used since it maintains correctness for small exponent.
     const amrex::ParticleReal probability = -std::expm1(-probability_estimate);
 
-    const amrex::Real w_new = w_min/fusion_multiplier_eff;
+    const amrex::ParticleReal w_new = w_min/fusion_multiplier_eff;
 
     // Save the particle production density if requested
     if (particle_production.ok()) {
-        const amrex::Real new_products = probability*w_new/dV;
+        const auto new_products = static_cast<amrex::Real>(probability*w_new/dV);
         amrex::Gpu::Atomic::AddNoRet(&particle_production(global_index), new_products);
 
     }
