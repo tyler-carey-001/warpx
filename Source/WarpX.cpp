@@ -2306,7 +2306,7 @@ WarpX::BackwardCompatibility ()
     int ncollisions;
     if (pp_collisions.query("ncollisions", ncollisions)){
         ablastr::warn_manager::WMRecordWarning("Collisions",
-            "collisions.ncollisions is ignored. Just use particles.collision_names please.",
+            "collisions.ncollisions is ignored. Just use collisions.collision_names please.",
             ablastr::warn_manager::WarnPriority::low);
     }
 

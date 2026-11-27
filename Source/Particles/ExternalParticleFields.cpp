@@ -98,7 +98,7 @@ ExternalParticleFields::ReadParameters () {
                 ablastr::warn_manager::WMRecordWarning(
                     "read_fields_from_path",
                     "particles.read_fields_from_path is ignored when "
-                    "particles.B_ext_particle_fields is used.",
+                    "particles.E_ext_particle_fields is used.",
                     ablastr::warn_manager::WarnPriority::low);
             }
             if (pp_particles.query("read_fields_E_dependency(t)",
