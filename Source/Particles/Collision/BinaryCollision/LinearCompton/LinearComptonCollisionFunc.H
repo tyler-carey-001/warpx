@@ -74,6 +74,10 @@ public:
         m_event_multiplier = default_event_multiplier;
         utils::parser::queryWithParser(
             pp_collision_name, "event_multiplier", m_event_multiplier);
+        // Products get weight min(w1,w2)/event_multiplier, which must not
+        // exceed the weight of the lighter reactant.
+        WARPX_ALWAYS_ASSERT_WITH_MESSAGE(m_event_multiplier >= 1,
+            collision_name + ".event_multiplier must be at least 1.");
 
         constexpr auto default_probability_threshold = 0.02_prt;
         m_probability_threshold = default_probability_threshold;

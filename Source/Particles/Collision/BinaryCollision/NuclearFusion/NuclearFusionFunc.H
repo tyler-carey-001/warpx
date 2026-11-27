@@ -73,6 +73,10 @@ public:
         const amrex::ParmParse pp_collision_name(collision_name);
         utils::parser::queryWithParser(
             pp_collision_name, "event_multiplier", m_fusion_multiplier);
+        // Products get weight min(w1,w2)/event_multiplier, which must not
+        // exceed the weight of the lighter reactant.
+        WARPX_ALWAYS_ASSERT_WITH_MESSAGE(m_fusion_multiplier >= 1,
+            collision_name + ".event_multiplier must be at least 1.");
         utils::parser::queryWithParser(
             pp_collision_name, "probability_threshold", m_probability_threshold);
         utils::parser::queryWithParser(

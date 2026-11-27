@@ -3344,7 +3344,7 @@ Details about the collision models can be found in the :ref:`theory section <mul
     the weight of the product macroparticles will be ``min(w_1,w_2)/event_multiplier``.
     (And the weights of the reactant macroparticles are reduced correspondingly after the collision.)
     See :cite:t:`param-HigginsonJCP2019` for more details.
-    The default value of ``event_multiplier`` is 1.
+    The default value of ``event_multiplier`` is 1; values smaller than 1 are not allowed.
 
 .. pp:param:: <collision_name>.probability_threshold
     :type: ``float``
