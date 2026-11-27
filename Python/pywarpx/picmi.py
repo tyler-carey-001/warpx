@@ -3032,9 +3032,10 @@ class LoadAppliedField(
     def applied_field_initialize_inputs(self):
         mangle_dict = pywarpx.my_constants.add_keywords(self.user_defined_kw)
 
+        # Do not reset the init style of a field that this object does not
+        # load: it may have been set by another applied field (the WarpX
+        # default is already "none").
         if not (self.load_E or self.load_B):
-            pywarpx.particles.E_ext_particle_init_style = "none"
-            pywarpx.particles.B_ext_particle_init_style = "none"
             return
 
         # Always register this object as a named external field so that multiple
@@ -3052,8 +3053,6 @@ class LoadAppliedField(
             dep_raw = self.E_time_function or "1.0"
             dep = pywarpx.my_constants.mangle_expression(dep_raw, mangle_dict)
             pywarpx.particles.__setattr__(f"{fname}.read_fields_E_dependency(t)", dep)
-        else:
-            pywarpx.particles.E_ext_particle_init_style = "none"
 
         if self.load_B:
             pywarpx.particles.B_ext_particle_init_style = "read_from_file"
@@ -3071,8 +3070,6 @@ class LoadAppliedField(
             dep_raw = self.B_time_function or "1.0"
             dep = pywarpx.my_constants.mangle_expression(dep_raw, mangle_dict)
             pywarpx.particles.__setattr__(f"{fname}.read_fields_B_dependency(t)", dep)
-        else:
-            pywarpx.particles.B_ext_particle_init_style = "none"
 
 
 class ConstantAppliedField(picmistandard.PICMI_ConstantAppliedField):
