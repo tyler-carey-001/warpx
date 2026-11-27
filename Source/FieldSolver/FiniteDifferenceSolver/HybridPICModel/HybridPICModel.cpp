@@ -25,6 +25,7 @@
 
 #include <AMReX_Random.H>
 
+#include <limits>
 #include <string>
 #include <vector>
 
@@ -2321,10 +2322,14 @@ void HybridPICModel::BfieldEvolve (
     // specified integration scheme. The loop is set up such that the timestep
     // for a given step (dt_sub) can be modified within the loop, i.e.,
     // adaptive timestepping.
-    while (t < dt_half)
+    // Adding up dt_sub can leave t a few ulps below dt_half, which would
+    // trigger one extra, vanishingly small (but full cost) substep. Treat
+    // the half-step as done within this tolerance.
+    const amrex::Real t_tol = 1.e3_rt * std::numeric_limits<amrex::Real>::epsilon() * dt_half;
+    while (t < dt_half - t_tol)
     {
         // Adjust size of the last substep, so as to land exactly at t+dt_half.
-        if (t + dt_sub > dt_half) { dt_sub = dt_half - t; }
+        if (t + dt_sub > dt_half - t_tol) { dt_sub = dt_half - t; }
         bool step_succeeded = true;
         amrex::Real step_change_factor = 1.0_rt;
 
