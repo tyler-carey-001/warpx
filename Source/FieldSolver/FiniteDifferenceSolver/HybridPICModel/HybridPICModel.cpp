@@ -1868,6 +1868,10 @@ void HybridPICModel::QDSMCApplyIonHeating (int const lev, amrex::Real const dt,
         auto & pc = mypc.GetParticleContainerFromName(spec_name);
         if (pc.getCharge() == 0._prt) { continue; }
         ++ion_comp;
+        // do_not_deposit tracers take no part in the electron energy
+        // exchange: they carry no deposited density or bulk velocity, so
+        // they must neither be dragged nor heated (as for the resistive drag).
+        if (pc.do_not_deposit) { continue; }
         auto const m_i = pc.getMass();
         if (m_i <= 0._prt) { continue; }
         ablastr::fields::VectorField Vs{};
