@@ -2582,10 +2582,14 @@ class ElectrostaticSolver(picmistandard.PICMI_ElectrostaticSolver):
     )
 
     def solver_initialize_inputs(self):
-        # Open BC means FieldBoundaryType::Open for electrostatic sims, rather than perfectly-matched layer
+        # Open BC means FieldBoundaryType::Open for electrostatic sims, rather than perfectly-matched layer.
+        # Restore the default mapping afterwards, so that a later simulation in
+        # the same Python process (e.g. electromagnetic) still maps "open" to PML.
         BC_map["open"] = "open"
-
-        self.grid.grid_initialize_inputs()
+        try:
+            self.grid.grid_initialize_inputs()
+        finally:
+            BC_map["open"] = "pml"
 
         # set adaptive timestepping parameters
         pywarpx.warpx.cfl = self.cfl
