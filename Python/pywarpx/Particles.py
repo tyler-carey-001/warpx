@@ -28,8 +28,10 @@ class Species(Bucket):
         try:
             return Bucket.__getattr__(self, name)
         except AttributeError:
-            # Create a new attibute if the name is a valid injection source name
-            if name not in self.injection_sources:
+            # Create a new attibute if the name is a valid injection source name.
+            # Read injection_sources from argvattrs directly: if it is not set,
+            # self.injection_sources would call __getattr__ again, endlessly.
+            if name not in self.argvattrs.get("injection_sources", ()):
                 raise AttributeError(
                     "Only valid injection source names can be added as new attributes"
                 )
