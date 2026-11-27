@@ -386,7 +386,7 @@ WarpXLaserProfiles::FromFileLaserProfile::read_binary_data_t_chunk (int t_begin,
         std::ifstream inp(m_params.binary_file_name, std::ios::binary);
         if(!inp) { WARPX_ABORT_WITH_MESSAGE("Failed to open binary file"); }
         inp.exceptions(std::ios_base::failbit | std::ios_base::badbit);
-#if (defined(WARPX_DIM_3D))
+#if (defined(WARPX_DIM_3D) || (defined WARPX_DIM_RZ))
         auto skip_amount = 1 +
         3*sizeof(uint32_t) +
         2*sizeof(double) +
