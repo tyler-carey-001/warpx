@@ -7,12 +7,12 @@
 #include "Utils/WarpXAlgorithmSelection.H"
 
 #include <AMReX_Array.H>
-#include <AMReX_GpuAtomic.H>
 #include <AMReX_GpuContainers.H>
 #include <AMReX_GpuLaunch.H>
 #include <AMReX_MFIter.H>
 #include <AMReX_ParallelDescriptor.H>
 #include <AMReX_Print.H>
+#include <AMReX_Reduce.H>
 
 #ifdef AMREX_USE_PETSC
 #   include <petscconf.h>
@@ -35,8 +35,12 @@ void ImplicitSolver::FinishImplicitParticleUpdate (
     for (auto const& pc : m_WarpX->GetPartContainer()) {
         if (!pc->HasiAttrib("nsuborbits")) { continue; }
 
-        amrex::Gpu::Buffer<amrex::Long> suborbit_count({0});
-        amrex::Long* const suborbit_count_ptr = suborbit_count.data();
+        // Count the particles that needed many suborbits. This is a
+        // reduction: different particles must not update a shared counter
+        // from inside a ParallelFor (or concurrently from OpenMP threads).
+        amrex::ReduceOps<amrex::ReduceOpSum> reduce_op;
+        amrex::ReduceData<amrex::Long> reduce_data(reduce_op);
+        using ReduceTuple = typename decltype(reduce_data)::Type;
 
         for (int lev = 0; lev <= m_WarpX->finestLevel(); ++lev) {
 #ifdef AMREX_USE_OMP
@@ -48,19 +52,17 @@ void ImplicitSolver::FinishImplicitParticleUpdate (
                         pti.GetiAttribs("nsuborbits").dataPtr();
                     long const np = pti.numParticles();
                     int const suborbit_warning_threshold = m_suborbit_warning_threshold;
-                    amrex::ParallelFor(np, [=] AMREX_GPU_DEVICE (long ip)
-                    {
-                        if (nsuborbits[ip] >= suborbit_warning_threshold) {
-                            amrex::Gpu::Atomic::Add(
-                                suborbit_count_ptr, amrex::Long(1));
-                        }
-                    });
+                    reduce_op.eval(np, reduce_data,
+                        [=] AMREX_GPU_DEVICE (long ip) -> ReduceTuple
+                        {
+                            return {(nsuborbits[ip] >= suborbit_warning_threshold)
+                                    ? amrex::Long(1) : amrex::Long(0)};
+                        });
                 }
             }
         }
 
-        local_suborbit_counts[pc->getName()] =
-            *(suborbit_count.copyToHost());
+        local_suborbit_counts[pc->getName()] = amrex::get<0>(reduce_data.value(reduce_op));
     }
 
     AccumulateSuborbitStatistics(local_suborbit_counts, step);
