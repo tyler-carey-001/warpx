@@ -1091,7 +1091,7 @@ PhysicalParticleContainer::SplitParticles (int lev)
                     // Add one particle with offset in x
                     psplit_x.push_back( xp + ishift*split_offset[0] );
                     psplit_y.push_back( yp );
-                    psplit_x.push_back( zp );
+                    psplit_z.push_back( zp );
                     psplit_ux.push_back( uxp[i] );
                     psplit_uy.push_back( uyp[i] );
                     psplit_uz.push_back( uzp[i] );
