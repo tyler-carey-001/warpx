@@ -2898,6 +2898,9 @@ class AnalyticInitialField(picmistandard.PICMI_AnalyticAppliedField):
                 ["x", "y", "z"],
                 [self.Ex_expression, self.Ey_expression, self.Ez_expression],
             ):
+                # WarpX requires all three components; unspecified ones are zero.
+                if expression is None:
+                    expression = "0."
                 expression = pywarpx.my_constants.mangle_expression(
                     expression, self._mangle_dict
                 )
@@ -2915,6 +2918,9 @@ class AnalyticInitialField(picmistandard.PICMI_AnalyticAppliedField):
                 ["x", "y", "z"],
                 [self.Bx_expression, self.By_expression, self.Bz_expression],
             ):
+                # WarpX requires all three components; unspecified ones are zero.
+                if expression is None:
+                    expression = "0."
                 expression = pywarpx.my_constants.mangle_expression(
                     expression, self._mangle_dict
                 )
@@ -3119,6 +3125,9 @@ class AnalyticAppliedField(picmistandard.PICMI_AnalyticAppliedField):
                 ["x", "y", "z"],
                 [self.Ex_expression, self.Ey_expression, self.Ez_expression],
             ):
+                # WarpX requires all three components; unspecified ones are zero.
+                if expression is None:
+                    expression = "0."
                 expression = pywarpx.my_constants.mangle_expression(
                     expression, self._mangle_dict
                 )
@@ -3138,6 +3147,9 @@ class AnalyticAppliedField(picmistandard.PICMI_AnalyticAppliedField):
                 ["x", "y", "z"],
                 [self.Bx_expression, self.By_expression, self.Bz_expression],
             ):
+                # WarpX requires all three components; unspecified ones are zero.
+                if expression is None:
+                    expression = "0."
                 expression = pywarpx.my_constants.mangle_expression(
                     expression, self._mangle_dict
                 )
