@@ -275,10 +275,10 @@ class WarpX(Bucket):
             bucket.clear()
 
     def getProbLo(self, direction):
-        return libwarpx.libwarpx_so.warpx_getProbLo(direction)
+        return libwarpx.libwarpx_so.get_instance().Geom(0).ProbLo(direction)
 
     def getProbHi(self, direction):
-        return libwarpx.libwarpx_so.warpx_getProbHi(direction)
+        return libwarpx.libwarpx_so.get_instance().Geom(0).ProbHi(direction)
 
     def write_inputs(self, filename="inputs", **kw):
         argv = self.create_argv_list(**kw)

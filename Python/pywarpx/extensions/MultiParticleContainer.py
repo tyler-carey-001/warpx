@@ -24,6 +24,6 @@ def register_warpx_MultiParticleContainer_extension(libwarpx_so):
     """MultiParticleContainer helper methods"""
 
     # Register additional methods
-    libwarpx_so.WarpXParticleContainer.get_particle_container_from_name = (
+    libwarpx_so.MultiParticleContainer.get_particle_container_from_name = (
         get_particle_container_from_name
     )

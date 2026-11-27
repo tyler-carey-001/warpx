@@ -377,7 +377,7 @@ def printcallbacktimers(tmin=1.0, lminmax=False, ff=None):
                 vmin = numpy.min(vlist)
                 vmax = numpy.max(vlist)
                 ff.write("  %10.4f  %10.4f" % (vmin, vmax))
-            it = libwarpx.libwarpx_so.warpx_getistep(0)
+            it = libwarpx.libwarpx_so.get_instance().getistep(0)
             if it > 0:
                 ff.write("   %10.4f" % (vsum / npes / (it)))
             ff.write("\n")

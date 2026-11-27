@@ -93,7 +93,7 @@ class LibWarpX:
         elif _dims == "1" or _dims == "2" or _dims == "3":
             self.geometry_dim = "%dd" % int(_dims)
         else:
-            raise Exception("Undefined geometry %d" % _dims)
+            raise Exception(f"Undefined geometry {_dims}")
 
         try:
             if self.geometry_dim == "1d":
